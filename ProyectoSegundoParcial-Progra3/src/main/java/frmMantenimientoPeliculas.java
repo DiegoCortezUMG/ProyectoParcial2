@@ -5,8 +5,8 @@
  */
 
 
-import PaqueteUsuario.daoUsuario1;
-import PaqueteUsuario.clsUsuario1;
+import PaquetePeliculas.daoPeliculas;
+import PaquetePeliculas.clsPelicula;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -16,29 +16,34 @@ import java.io.File;
  *
  * @author visitante
  */
-public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
+public class frmMantenimientoPeliculas extends javax.swing.JInternalFrame {
 
     public void llenadoDeCombos() {
-        daoUsuario1 usuarioDAO = new daoUsuario1();
-        List<clsUsuario1> usuarios = usuarioDAO.select();
+        daoPeliculas peliculaDAO = new daoPeliculas();
+        List<clsPelicula> peliculas;
+        peliculas = daoPeliculas.select();
         cbox_empleado.addItem("Seleccione una opción");
-        for (int i = 0; i < usuarios.size(); i++) {
-            cbox_empleado.addItem(usuarios.get(i).getUsunombre());
+        for (int i = 0; i < peliculas.size(); i++) {
+            cbox_empleado.addItem(peliculas.get(i).getPeli_nombre());
         }
     }
 
     public void llenadoDeTablas() {
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID Usuario");
+        modelo.addColumn("");
+        modelo.addColumn("nombre");
+        modelo.addColumn("");
         modelo.addColumn("nombre");
         
-        daoUsuario1 vendedorDAO = new daoUsuario1();
-        List<clsUsuario1> vendedores = vendedorDAO.select();
+        daoPeliculas vendedorDAO = new daoPeliculas();
+        List<clsPelicula> vendedores = vendedorDAO.select();
         tablaVendedores.setModel(modelo);
         String[] dato = new String[3];
         for (int i = 0; i < vendedores.size(); i++) {
-            dato[0] = Integer.toString(vendedores.get(i).getUsuid());
-            dato[1] = vendedores.get(i).getUsunombre();
+            dato[0] = Integer.toString(vendedores.get(i).getPeli_Id());
+            dato[1] = vendedores.get(i).getPeli_nombre();
+            dato[2] = vendedores.get(i).getPeli_clasif();
+            dato[3] = vendedores.get(i).getPeli_estado();
             
             //System.out.println("vendedor:" + vendedores);
             modelo.addRow(dato);
@@ -46,14 +51,14 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
     }
 
     public void buscarVendedor() {
-        clsUsuario1 vendedorAConsultar = new clsUsuario1();
-        daoUsuario1 vendedorDAO = new daoUsuario1();
-        vendedorAConsultar.setUsuid(Integer.parseInt(txtbuscado.getText()));
+        clsPelicula vendedorAConsultar = new clsPelicula();
+        daoPeliculas vendedorDAO = new daoPeliculas();
+        vendedorAConsultar.setPeli_Id(Integer.parseInt(txtbuscado.getText()));
         vendedorAConsultar = vendedorDAO.query(vendedorAConsultar);
-        txtNombre.setText(vendedorAConsultar.getUsunombre());        
+        txtNombre.setText(vendedorAConsultar.getPeli_nombre());        
     }
 
-    public frmMantenimientoUsuarios() {
+    public frmMantenimientoPeliculas() {
         initComponents();
         llenadoDeTablas();
         llenadoDeCombos();
@@ -83,10 +88,12 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
         tablaVendedores = new javax.swing.JTable();
         cbox_empleado = new javax.swing.JComboBox<>();
         label4 = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
+        txtClasif = new javax.swing.JTextField();
         label5 = new javax.swing.JLabel();
         lb = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        txtEstado = new javax.swing.JTextField();
+        label6 = new javax.swing.JLabel();
 
         lb2.setForeground(new java.awt.Color(204, 204, 204));
         lb2.setText(".");
@@ -95,7 +102,7 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Mantenimiento Vendedor");
+        setTitle("Mantenimiento Peliculas");
         setVisible(true);
 
         btnEliminar.setText("Eliminar");
@@ -171,11 +178,11 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
         label4.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         label4.setText("Empleado:");
 
-        txtDireccion.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtDireccion.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        txtClasif.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtClasif.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
 
         label5.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        label5.setText("Dirección");
+        label5.setText("Clasificación:");
 
         lb.setForeground(new java.awt.Color(204, 204, 204));
         lb.setText(".");
@@ -186,6 +193,12 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        txtEstado.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtEstado.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+
+        label6.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        label6.setText("Estado");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,17 +225,19 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(label3)
-                            .addComponent(label5))
+                            .addComponent(label5)
+                            .addComponent(label6))
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                            .addComponent(txtNombre))
+                            .addComponent(txtClasif, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                            .addComponent(txtNombre)
+                            .addComponent(txtEstado, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lb, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -253,9 +268,13 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
                                     .addComponent(label3))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtClasif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(label5)))
                             .addComponent(lb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRegistrar)
@@ -279,17 +298,17 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        daoUsuario1 vendedorDAO = new daoUsuario1();
-        clsUsuario1 vendedorAEliminar = new clsUsuario1();
-        vendedorAEliminar.setUsuid(Integer.parseInt(txtbuscado.getText()));
+        daoPeliculas vendedorDAO = new daoPeliculas();
+        clsPelicula vendedorAEliminar = new clsPelicula();
+        vendedorAEliminar.setPeli_Id(Integer.parseInt(txtbuscado.getText()));
         vendedorDAO.delete(vendedorAEliminar);
         llenadoDeTablas();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        daoUsuario1 vendedorDAO = new daoUsuario1();
-        clsUsuario1 vendedorAInsertar = new clsUsuario1();
-        vendedorAInsertar.setUsunombre(txtNombre.getText());
+        daoPeliculas vendedorDAO = new daoPeliculas();
+        clsPelicula vendedorAInsertar = new clsPelicula();
+        vendedorAInsertar.setPeli_nombre(txtNombre.getText());
         vendedorDAO.insert(vendedorAInsertar);
         llenadoDeTablas();
     }//GEN-LAST:event_btnRegistrarActionPerformed
@@ -301,10 +320,12 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
 //        // TODO add your handling code here:
-        daoUsuario1 vendedorDAO = new daoUsuario1();
-        clsUsuario1 vendedorAActualizar = new clsUsuario1();
-        vendedorAActualizar.setUsuid(Integer.parseInt(txtbuscado.getText()));
-        vendedorAActualizar.setUsunombre(txtNombre.getText());
+        daoPeliculas vendedorDAO = new daoPeliculas();
+        clsPelicula vendedorAActualizar = new clsPelicula();
+        vendedorAActualizar.setPeli_Id(Integer.parseInt(txtbuscado.getText()));
+        vendedorAActualizar.setPeli_nombre(txtNombre.getText());
+        vendedorAActualizar.setPeli_clasif(txtClasif.getText());
+        vendedorAActualizar.setPeli_estado(txtEstado.getText());
         vendedorDAO.update(vendedorAActualizar);
         llenadoDeTablas();
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -312,7 +333,7 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         cbox_empleado.setSelectedIndex(0);
         txtNombre.setText("");
-        txtDireccion.setText("");
+        txtClasif.setText("");
         txtbuscado.setText("");
         btnRegistrar.setEnabled(true);
         btnModificar.setEnabled(true);
@@ -357,11 +378,13 @@ public class frmMantenimientoUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JLabel label3;
     private javax.swing.JLabel label4;
     private javax.swing.JLabel label5;
+    private javax.swing.JLabel label6;
     private javax.swing.JLabel lb;
     private javax.swing.JLabel lb2;
     private javax.swing.JLabel lbusu;
     private javax.swing.JTable tablaVendedores;
-    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtClasif;
+    private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtbuscado;
     // End of variables declaration//GEN-END:variables

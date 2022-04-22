@@ -1,7 +1,5 @@
 package PaquetePeliculas;
 
-import PaqueteUsuario.*;
-
 public class clsPelicula {
     private int peli_id;
     private String peli_nombre;
@@ -64,7 +62,7 @@ public class clsPelicula {
 
     @Override
     public String toString() {
-        return "peliculas{" + "id_pelicula=" +peli_id  + ", nombre_pelicula=" + peli_nombre + ", clasif_pelicula=" + peli_clasif + ", estado_pelicula="+ peli_estado + '}';
+        return "peilculas{" + "id_pelicula=" +peli_id  + ", nombre_pelicula=" + peli_nombre + ", clasif_pelicula=" + peli_clasif + ", estado_pelicula="+ peli_estado + '}';
     }
     
     

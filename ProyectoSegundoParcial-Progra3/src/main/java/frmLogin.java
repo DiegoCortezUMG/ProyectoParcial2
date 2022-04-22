@@ -6,11 +6,11 @@
 
 
 
-import PaqueteUsuario.clsUsuario;
+import PaqueteUsuario.clsUsuario1;
 import java.awt.HeadlessException;
 
 import javax.swing.JOptionPane;
-import PaqueteUsuario.daoUsuario;
+import PaqueteUsuario.daoUsuario1;
 
 /**
  *
@@ -133,13 +133,13 @@ public class frmLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "NO PUEDEN HABER CAMPOS VACIOS", "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
-                clsUsuario usuarioAConsultar = new clsUsuario();
-                daoUsuario usuarioDAO = new daoUsuario();
-                usuarioAConsultar.setUsername(txtUsuario.getText().trim());
+                clsUsuario1 usuarioAConsultar = new clsUsuario1();
+                daoUsuario1 usuarioDAO = new daoUsuario1();
+                usuarioAConsultar.setUsunombre(txtUsuario.getText().trim());
                 // Recuperación de información a través de otro objeto
                 usuarioAConsultar = usuarioDAO.query(usuarioAConsultar);
 
-                if (txtContraseña.getText().equals(usuarioAConsultar.getPassword()) && txtUsuario.getText().equals(usuarioAConsultar.getUsername())) {
+                if (txtContraseña.getText().equals(usuarioAConsultar.getUsucontrasena()) && txtUsuario.getText().equals(usuarioAConsultar.getUsunombre())) {
                     JOptionPane.showMessageDialog(null, "Bienvenido al SISTEMA\n", "Mensaje de bienvenida", JOptionPane.INFORMATION_MESSAGE);
 
                     mdiGeneral menuGeneral = new mdiGeneral();
